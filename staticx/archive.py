@@ -111,16 +111,20 @@ class SxArchive(object):
 
             # add a symlink.  at this point the target probably doesn't exist, but that doesn't matter yet
             logging.info("    Adding Symlink {} => {}".format(arcname, basename(linklib)))
-            self.add_symlink(arcname, basename(linklib))
             if arcname not in self._added_libs:
+                self.add_symlink(arcname, basename(linklib))
                 self._added_libs.append(arcname)
+            else:
+                logging.info("    Archive alredy exists {} ".format(linklib))
 
         # left with a real file at this point, add it to the archive.
         arcname = basename(linklib)
-        logging.info("    Adding {} as {}".format(linklib, arcname))
-        self.tar.add(linklib, arcname=arcname)
         if arcname not in self._added_libs:
+            logging.info("    Adding {} as {}".format(linklib, arcname))
+            self.tar.add(linklib, arcname=arcname)
             self._added_libs.append(arcname)
+        else:
+            logging.info("    Archive alredy exists {} ".format(linklib))
 
     def add_interp_symlink(self, interp):
         """Add symlink for ld.so interpreter"""
