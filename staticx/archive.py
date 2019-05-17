@@ -115,7 +115,7 @@ class SxArchive(object):
                 self.add_symlink(arcname, basename(linklib))
                 self._added_libs.append(arcname)
             else:
-                logging.info("    Archive alredy exists {} ".format(linklib))
+                logging.info("    Archive already exists {} ".format(linklib))
 
         # left with a real file at this point, add it to the archive.
         arcname = basename(linklib)
@@ -124,7 +124,7 @@ class SxArchive(object):
             self.tar.add(linklib, arcname=arcname)
             self._added_libs.append(arcname)
         else:
-            logging.info("    Archive alredy exists {} ".format(linklib))
+            logging.info("    Archive already exists {} ".format(linklib))
 
     def add_interp_symlink(self, interp):
         """Add symlink for ld.so interpreter"""
