@@ -18,7 +18,8 @@ def process_pyinstaller_archive(sx_ar, prog):
     # Attempt to open the program as PyInstaller archive
     try:
         pyi_ar = CArchiveReader(prog)
-    except:
+    except Exception as e:
+        logging.warning(e)
         # Silence all PyInstaller exceptions here
         return
     logging.info("Opened PyInstaller archive!")
