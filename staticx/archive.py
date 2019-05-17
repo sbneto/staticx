@@ -103,9 +103,6 @@ class SxArchive(object):
         Symlinks will also be added and followed.
         """
 
-        if basename(path) in self._added_libs:
-            raise LibExistsError(basename(path))
-
         # 'recursively' step through any symbolic links, generating local links inside the archive
         linklib = path
         while islink(linklib):
@@ -115,13 +112,15 @@ class SxArchive(object):
             # add a symlink.  at this point the target probably doesn't exist, but that doesn't matter yet
             logging.info("    Adding Symlink {} => {}".format(arcname, basename(linklib)))
             self.add_symlink(arcname, basename(linklib))
-            self._added_libs.append(arcname)
+            if arcname not in self._added_libs:
+                self._added_libs.append(arcname)
 
         # left with a real file at this point, add it to the archive.
         arcname = basename(linklib)
         logging.info("    Adding {} as {}".format(linklib, arcname))
         self.tar.add(linklib, arcname=arcname)
-        self._added_libs.append(arcname)
+        if arcname not in self._added_libs:
+            self._added_libs.append(arcname)
 
     def add_interp_symlink(self, interp):
         """Add symlink for ld.so interpreter"""
